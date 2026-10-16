@@ -1,0 +1,35 @@
+{
+  "created_at": "2026-10-16T05:40:29.853024+00:00",
+  "status": "passed",
+  "lessons": 30,
+  "questions": 120,
+  "practice_questions": 90,
+  "transfer_questions": 30,
+  "exact_arithmetic_answer_checks": 60,
+  "reading_evidence_source_checks": 60,
+  "self_contained_reading_transfers": 15,
+  "correct_answer_position_counts": {
+    "0": 30,
+    "1": 30,
+    "2": 30,
+    "3": 30
+  },
+  "distribution": {
+    "12-15/maths": 5,
+    "12-15/reading": 5,
+    "6-8/maths": 5,
+    "6-8/reading": 5,
+    "9-11/maths": 5,
+    "9-11/reading": 5
+  },
+  "dataset_sha256": "53f1002d65e9f61919954458736a43826aa262da8b95a163186d6f9653a061de",
+  "network_calls": 0,
+  "human_review_completed": false,
+  "model_evaluation": "not_run",
+  "limitations": [
+    "Arithmetic is checked from authored metadata; this does not independently parse or prove every natural-language explanation.",
+    "Reading evidence checks verify quoted source text, not semantic correctness, reading-level calibration or clinical/educational assessment validity.",
+    "No independent teacher review, child study, learning-gain claim or paid model inference has been performed.",
+    "Age bands are navigation choices for foundation practice, not a diagnosis or a certified curriculum alignment."
+  ]
+}

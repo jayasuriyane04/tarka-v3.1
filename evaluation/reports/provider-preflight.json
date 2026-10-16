@@ -1,0 +1,11 @@
+{
+  "observed_date": "2026-10-16",
+  "ok": false,
+  "mode": "read_only",
+  "inference_requests": 0,
+  "checks": [
+    {"name": "application_configuration", "ok": true},
+    {"name": "nebius_model_access", "ok": false, "action": "Set NEBIUS_API_KEY locally in the v3 root .env file. Authored lessons remain available without AI."}
+  ],
+  "limitations": "No account model catalog was contacted because the key is missing. Live inference, quality, latency and cost remain unverified. Paid operations are not authorized."
+}

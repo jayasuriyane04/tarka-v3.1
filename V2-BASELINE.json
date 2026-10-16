@@ -1,0 +1,237 @@
+{
+  "source": "../tarka-v2",
+  "copied_files": [
+    {
+      "path": ".dockerignore",
+      "sha256": "ad2465f71c68292332cd9255c891716a0d76fc968bdb283ffac285f59fa23f2c"
+    },
+    {
+      "path": ".env.example",
+      "sha256": "04deb9a4cc0ba3053d3ffe1a53e81ac1d646f5091785600c713073b898c3f9e2"
+    },
+    {
+      "path": ".gitignore",
+      "sha256": "ab4ae1f504571a18c0dc0bbd47388cb770172406a93a5c97183d1ff4e27d1c46"
+    },
+    {
+      "path": "backend/alembic/env.py",
+      "sha256": "47fb6bfb67c25bc7f838be39154aec57e56002ae9b33936ecfdc51f3b6512ed5"
+    },
+    {
+      "path": "backend/alembic/script.py.mako",
+      "sha256": "116d035db5d6b4abe2f7e00e60d547bf8396983c741d09af902b184ccc6e0a35"
+    },
+    {
+      "path": "backend/alembic/versions/0001_family_initial.py",
+      "sha256": "81d7eafe044c0d307d77a6ed63f7cb80e1a2696cdc79bd876f5b2d5a01eab475"
+    },
+    {
+      "path": "backend/alembic.ini",
+      "sha256": "d8ffa0303a38d80662ea8db7f4bbd40252b404b4f3f2b9e2bf2713d1bba445bc"
+    },
+    {
+      "path": "backend/app/__init__.py",
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "path": "backend/app/config.py",
+      "sha256": "0b5027181ed64421b5459333cb26a85e8e4b1fe8400ff69557de557e93a9916e"
+    },
+    {
+      "path": "backend/app/db.py",
+      "sha256": "2549bc0d9ce1b80e003df0b7a3c7c7e090329114f2c1a0a2a2d7de943780427c"
+    },
+    {
+      "path": "backend/app/main.py",
+      "sha256": "0e37e8d5e6ae9bbab7070a74e4abb4b8ed66f060d3b865330e6c37e0db6b1e1b"
+    },
+    {
+      "path": "backend/app/manage.py",
+      "sha256": "a84a98463bbad656a4111555f79d9855f8cb285df89fecea437e8285c0a6a7d6"
+    },
+    {
+      "path": "backend/app/providers.py",
+      "sha256": "c0f49edf71b6307e65bc9a065712ae5ab3ff3bce16aad51908e7872494910115"
+    },
+    {
+      "path": "backend/app/schemas.py",
+      "sha256": "c0239128d81fd322d6709cf719acb2e49ccd86d7de3958d10c573443161e0d5f"
+    },
+    {
+      "path": "backend/content/lessons.json",
+      "sha256": "3d683953323f157b79fca1a809ee277feee14702cfb8bd0ec6172eb1e4b75b91"
+    },
+    {
+      "path": "backend/content/README.md",
+      "sha256": "11ffc1b81be0a7988e393b4a4e76ab88846946096c4ff1aa4d991218d1816ff7"
+    },
+    {
+      "path": "backend/requirements.lock.txt",
+      "sha256": "1c9d1d482909c8007a25d460724ffcc8e6c98fbd2e694f89b19c7c28ee537302"
+    },
+    {
+      "path": "backend/requirements.txt",
+      "sha256": "ca2dfa6af59275a5488cea380e5ca1e511cd54ae79bfd379ad48b1b881829234"
+    },
+    {
+      "path": "backend/tests/test_api.py",
+      "sha256": "cf426dc1f94f3b419bc1b94c11b8f2ad769613a2f18f2ba77f275a58f6377406"
+    },
+    {
+      "path": "backend/tests/test_curriculum.py",
+      "sha256": "209bf20cd349ce5782d38eac3fcee90d30fe744ec8e007cb96db048a87a05a7e"
+    },
+    {
+      "path": "backend/tests/test_manage.py",
+      "sha256": "a8d93c5e877b251e293eacc2663ba090a331ccba4c18c36c296d5f5529943b9c"
+    },
+    {
+      "path": "backend/tests/test_providers.py",
+      "sha256": "db52aa5b7921bd6b649974ccd517aa3ef9c2f8a8b44a51874ae082f362b67b8d"
+    },
+    {
+      "path": "docker-compose.yml",
+      "sha256": "33e5211ef5540d6e3eff3e2a3ebc4bffeefcd18de1c9bb52e9ca46804198e5ef"
+    },
+    {
+      "path": "Dockerfile",
+      "sha256": "d8584ac29b2531a7fd70acf6973387ceaab4db6d62db8cc0b9d6f449b0bceb8c"
+    },
+    {
+      "path": "docs/ARCHITECTURE.md",
+      "sha256": "af7634ff2e566d6fa3f3c024f7a330930498b8db295e15142bd8f9dd86a62718"
+    },
+    {
+      "path": "docs/DEMO-STORYBOARD.md",
+      "sha256": "8fc7e2ca2464e9eaa4539030c21a7485c42dbf98c978e89407c77ec3b5f11edc"
+    },
+    {
+      "path": "docs/DEPENDENCIES.md",
+      "sha256": "c74936466cb12b116cc3d2a0b03350effb3288a334c8b94673eba59aa80aa481"
+    },
+    {
+      "path": "docs/DEPLOYMENT.md",
+      "sha256": "d40a4bc6acc602c54118c94ae428462d3c8e75474bb8b2c3ab1ce478a2463eb7"
+    },
+    {
+      "path": "docs/DEVPOST-DRAFT.md",
+      "sha256": "1c20de14f2a3ddd9121d7ca463749b782edc8664f63b039afe8116ba74ae5d49"
+    },
+    {
+      "path": "docs/EVALUATION.md",
+      "sha256": "19659d2bdea14751d1e5224f5859e3a1061ec6fb269a381ab4dbfff4c954d9f8"
+    },
+    {
+      "path": "docs/PARENT-GUIDE.md",
+      "sha256": "7646cd21aa077aeb8a0f17da9e6e239fc93cc93572245161314281dc43649725"
+    },
+    {
+      "path": "docs/SAFETY-AND-PRIVACY.md",
+      "sha256": "6f692de7879e4b9b36e87ee381672bda5ba0cbecff83d36af76fac5e4f214f06"
+    },
+    {
+      "path": "docs/STUDY-RESULTS-TEMPLATE.md",
+      "sha256": "72b80279dd4c2a484f0ce8bf7f01cdf51e8b78cd35b675632e5e0c72478fde3a"
+    },
+    {
+      "path": "evaluation/author_lessons.py",
+      "sha256": "c187e37f181dcdbcead80adcc6c1f7c2d4785c53531fd45eb8af8886872623b6"
+    },
+    {
+      "path": "evaluation/README.md",
+      "sha256": "ffc7f8d9dcea115b7e0850481428ca6e94d5b749726e6485807fc4773a648f33"
+    },
+    {
+      "path": "evaluation/validate_curriculum.py",
+      "sha256": "a5c3d892c987d19b1dd4fae588b306f182e65192de8e3530acb79c66b44e4959"
+    },
+    {
+      "path": "frontend/index.html",
+      "sha256": "86f0f07218da0f82c69bdac8a5aa52fbc8f5873a3d6e5ace7f49ed10fa0dae01"
+    },
+    {
+      "path": "frontend/package-lock.json",
+      "sha256": "620df55fe808e6642126ba91162951b8b4f2e238e9dbcc9e40601ba47c9ce26f"
+    },
+    {
+      "path": "frontend/package.json",
+      "sha256": "2831b9462141dc8d5ca86fca5fb7789fb296fbc87b6bc06a0498f4b2cbc80ec9"
+    },
+    {
+      "path": "frontend/public/favicon.svg",
+      "sha256": "547564f0e64eb69a326dd3498353d1faa9b37e0ef3a3a8eadbc1c2ec4fb9ac90"
+    },
+    {
+      "path": "frontend/src/api.test.ts",
+      "sha256": "233c738e3021ddb070cad55ab1324abf8f88aae3a5db54f630acf5804b108d92"
+    },
+    {
+      "path": "frontend/src/api.ts",
+      "sha256": "cc8d9293bc1328bfaf356c8a9fc8e934d46d0c333f1812c3fb859e68a1f09a95"
+    },
+    {
+      "path": "frontend/src/App.tsx",
+      "sha256": "98ad86ea1895df06698d372aaf9a24e8425527609abe794545d872c15487c4c9"
+    },
+    {
+      "path": "frontend/src/art.tsx",
+      "sha256": "03ae3803a1c1eb42e1c2a4ae66358a8bd5c8a08be4a9bad29a4052443db8dcae"
+    },
+    {
+      "path": "frontend/src/learning.test.tsx",
+      "sha256": "255a4eda1c6ebb8ab6b59e1d42726e6f8187e2b36964f63f868736a32e60fa9b"
+    },
+    {
+      "path": "frontend/src/main.tsx",
+      "sha256": "5c33f5a20e7338ac9ffc3d8852ab7d887dd27883abc359c35e6713ffce82e524"
+    },
+    {
+      "path": "frontend/src/styles.css",
+      "sha256": "9146df30cb095c4ccf7accf5a3431e49a676ba353a0b32272824098f4acc448c"
+    },
+    {
+      "path": "frontend/src/types.test.ts",
+      "sha256": "546883ce2562d4e1c94ae13c74e1a3902074f5e9a7ae553c12285773e70f0776"
+    },
+    {
+      "path": "frontend/src/types.ts",
+      "sha256": "01b1b244a4c332bbd8ceb0ea7a70e3dc3731456e3e4675342f5528ff722a906b"
+    },
+    {
+      "path": "frontend/tsconfig.json",
+      "sha256": "62015575d91a44ccae210b008c64c6c87840f2516a84dd582337791abd79f62c"
+    },
+    {
+      "path": "frontend/vite.config.ts",
+      "sha256": "26f0d804f6d783d10f3557344d5d7de57f54c351cb83b0b201a5542e5c80fb2d"
+    },
+    {
+      "path": "HANDOVER.md",
+      "sha256": "3c1461634290ab11cb49102f91b7de6ce29dd22dc921ef73eed72d5003ce059c"
+    },
+    {
+      "path": "LICENSE",
+      "sha256": "638dc872abfb8e111cb2ed2ee71920ba77b502ebbeeb1bc27ac96e08d07c0923"
+    },
+    {
+      "path": "PLAN.md",
+      "sha256": "939f2fb5dd5a390f89fdb5c1260f1bb3d2bbf7eb701cc5e1a2566311c45d9794"
+    },
+    {
+      "path": "README.md",
+      "sha256": "5633a3f781e28a3da4805dfef07c5ca046d4e3c7d7ee301a6bd27d09e24a122c"
+    },
+    {
+      "path": "SPEC.md",
+      "sha256": "09bd2b55c05e448027f3982afda5fcffcd93bc161fdee848a9fd60335a28e659"
+    },
+    {
+      "path": "START-LOCAL.ps1",
+      "sha256": "f796bc5d767fc76a145558fb6376821830b78b101abfa45b6ac8d39eaf51972e"
+    },
+    {
+      "path": "STATUS.md",
+      "sha256": "b976e7f871a94623b711963a5c394770e605effc7c63c56846125de04f565c6b"
+    }
+  ]
+}
