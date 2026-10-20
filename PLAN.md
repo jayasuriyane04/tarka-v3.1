@@ -1,5 +1,15 @@
 # Tarka V3 implementation plan
 
+## Active extension — 2026-10-19
+
+1. Done: persistent parent accounts, session/credential protections, migration0003 and legacy progress linking.
+2. Done: functional signup/login/account controls, owned-session UI and async navigation fixes.
+3. Done: optional validated maths boards, private drawing and assistance protection.
+4. Done:247 final backend tests,59 frontend tests, build, preservation checks and actual browser account/learning journey.
+5. Done: account/deployment/whiteboard documentation and measured handover; clean archive regenerated for this release.
+
+Previous V3 baseline below remains historical evidence, not verification of this extension.
+
 1. Done: copy V2 source, tests, curriculum, configuration and documentation; preserve V2 and save a hash manifest. Exclude credentials, child data and installed/build caches.
 2. Done: preserve V2 capabilities, isolate V3 cookies/database/ports, and add parent-controlled spoken teaching with visible transcripts, pace/voice choice and stop/pause controls.
 3. Done: preserve the original 18 lessons and add 12 original maths/reading lessons across three age bands (30 lessons / 120 questions).

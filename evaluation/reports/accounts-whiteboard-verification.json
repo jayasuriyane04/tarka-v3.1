@@ -1,0 +1,59 @@
+{
+  "release_date": "2026-10-21",
+  "scope": "Tarka V3 parent accounts and optional maths whiteboard",
+  "backend_tests": 247,
+  "backend_runs": [
+    {
+      "report": "accounts-auth-final-tests.xml",
+      "tests": 98,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 148.147
+    },
+    {
+      "report": "accounts-regression-final-tests.xml",
+      "tests": 149,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 13.432
+    }
+  ],
+  "frontend_tests": 59,
+  "frontend_build": "passed: TypeScript and Vite, 39 modules",
+  "curriculum": {
+    "lessons": 30,
+    "questions": 120,
+    "maths_boards": 15,
+    "board_steps": 45
+  },
+  "preservation": {
+    "v2_source_hashes_unchanged": 58,
+    "v2_original_lessons_preserved": 18
+  },
+  "browser": {
+    "url": "http://localhost:8004/",
+    "synthetic_only": true,
+    "signup": true,
+    "login_wrong_password_rejected": true,
+    "logout_login_restores_progress": true,
+    "completed_lesson": "m68-01",
+    "completed_evidence": "supported",
+    "lesson_attempts": 5,
+    "hints": 1,
+    "board_requests": 2,
+    "voice_requests": 0,
+    "whiteboard_steps_and_drawing_undo": true,
+    "transfer_example_blocked": true,
+    "narrow_viewport_content_width": 375,
+    "horizontal_overflow": false,
+    "console_errors_at_final_check": 0
+  },
+  "unverified": [
+    "Live Nebius inference",
+    "Production PostgreSQL/container/HTTPS deployment",
+    "Independent security audit",
+    "Human learning outcomes",
+    "Password-change browser journey (API tested)"
+  ],
+  "paid_inference_calls": 0
+}

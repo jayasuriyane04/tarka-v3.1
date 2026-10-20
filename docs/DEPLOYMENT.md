@@ -86,3 +86,7 @@ A public URL, successful container build, live inference check and completed chi
 ## V3 voice deployment check
 
 No speech key or paid voice provider is needed. The frontend uses installed browser-reported local English voices only. Test the actual target browser and device: voice enumeration may arrive asynchronously, unsupported/no-local-voice states must preserve text learning, and speech must stop on navigation and breaks. A server-side browser smoke test without local voices does not verify audible output. Parent opt-in and narration logs persist in the V3 database through migration 0002.
+
+## Account and whiteboard upgrade (2026-10-19)
+
+Stop the running app and back up its V3 database, rebuild the frontend, then run the normal launcher. Migration 0003 adds account/session/throttle tables without replacing learner records. Legacy profiles can link to an account with their existing PIN; do not create a fresh database when preserving V3 work. Read [account and board operations](ACCOUNTS-AND-WHITEBOARD.md) for session lifetimes, proxy settings, scrypt memory requirements and recovery limits. Validate signup, sign-in, sign-out-all, password changes, old-cookie rejection and owned progress in the deployed environment. No SMTP/API key is required for local parent accounts or authored whiteboards.

@@ -1,0 +1,37 @@
+.sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.auth-panel{width:min(100%,540px);margin:24px auto 40px;padding:34px;min-width:0}
+.auth-panel h1{font-family:Georgia,serif;font-weight:400;font-size:34px;line-height:1.2;margin:18px 0 12px;color:#465b3c}
+.auth-panel>p{font-size:14px;line-height:1.75;color:#596b50}
+.auth-mode{display:flex;gap:6px;padding:5px;background:#edf0e4;border-radius:12px;margin:24px 0}
+.auth-mode>button{flex:1;padding:11px 13px;border:0;background:transparent;color:#596b50;border-radius:9px;font:inherit;font-size:13px;cursor:pointer;min-height:44px}
+.auth-mode>button[aria-pressed=true]{background:#fffdf7;box-shadow:0 1px 4px #49603d18;color:#465b3c;font-weight:600}
+.auth-fields{display:grid;gap:19px;min-width:0;padding:0;border:0;margin:0}
+.auth-fields>.field{min-width:0}
+.auth-fields input:not([type=checkbox]){min-width:0;width:100%}
+.auth-check{display:flex;align-items:center;gap:9px;font-size:12px;color:#596b50;cursor:pointer;min-height:32px}
+.auth-check input{accent-color:#648150;width:17px;height:17px;flex-shrink:0}
+.auth-panel .auth-notice{font-size:12px;line-height:1.8;border-left:3px solid #ac95c4;background:#f3edf7;padding:12px 14px;border-radius:0 8px 8px 0;color:#65506e;margin:0}
+.auth-submit{width:100%;justify-content:center;min-height:47px}
+.auth-panel .auth-footnote{display:flex;align-items:flex-start;gap:9px;font-size:12px;margin-top:23px;padding-top:18px;border-top:1px solid #e3e7da}
+.auth-footnote>svg{flex-shrink:0;margin-top:4px}
+.auth-panel .auth-recovery,.account-panel .auth-recovery{font-size:11px;line-height:1.8;margin-top:13px}
+.auth-cancel{margin-top:10px}
+.auth-mode>button:focus-visible,.auth-check:focus-within{outline:3px solid #977ac0;outline-offset:3px}
+.auth-mode>button:disabled,.auth-fields:disabled{cursor:wait}
+.auth-panel .consent-option{font-size:12px;line-height:1.75}
+.auth-panel .field>span,.account-panel .field>span{font-size:12px}
+.auth-panel .field>small,.account-panel .field>small{font-size:11px;line-height:1.75}
+.account-panel>h2{margin-top:16px}
+.account-username{overflow-wrap:anywhere}
+.account-session-actions{display:flex;flex-wrap:wrap;gap:10px;margin:20px 0 12px}
+.account-session-actions>.button{min-height:44px;font-size:12px}
+.account-password-form{border-top:1px solid #e3e7da;padding-top:22px;margin-top:22px;max-width:480px}
+.account-password-form legend{font-size:16px;font-weight:600;color:#465b3c;margin-bottom:18px}
+.account-panel>.alert,.account-panel>.parent-success{margin-top:18px}
+.family-app>.site-header{height:auto;min-height:88px;padding-top:16px;padding-bottom:16px}
+.site-header .brand-button{flex-shrink:0}
+.site-header .header-actions{flex-wrap:wrap;justify-content:flex-end;gap:10px;min-width:0}
+.site-header .account-create{font-size:12px;min-height:44px;padding:10px 13px;white-space:nowrap}
+@media(max-width:760px){.family-app>.site-header{min-height:73px;flex-wrap:wrap;padding-top:12px;padding-bottom:12px}.site-header .header-actions{flex:1 1 220px;gap:8px}.site-header .header-child{display:none}}
+@media(max-width:480px){.site-header .header-actions{flex-basis:100%;justify-content:flex-start}.site-header .parent-link{font-size:11px;padding:9px 10px}.site-header .account-create{font-size:11px}.family-app>.site-header{row-gap:12px}}
+@media(max-width:480px){.auth-panel{padding:25px 21px;margin-top:8px}.auth-panel h1{font-size:29px}.auth-panel>p{font-size:13px}.account-session-actions{flex-direction:column}.account-session-actions>.button{width:100%}}

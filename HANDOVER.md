@@ -1,29 +1,25 @@
-# Tarka V3 handover
+# Tarka V3 handover — accounts and whiteboards
 
-V3 directly copies V2 and preserves its learning/parent/provider features. It adds parent-controlled spoken teaching and twelve lessons, for thirty lessons and 120 questions across ages 6–15. V1 and V2 are unchanged. See STATUS.md for the final measured verification and remaining blockers.
+The V3 extension is implemented and verified locally. It preserves30 lessons/120 questions, voice teaching and parent controls, and adds authenticated parent accounts plus optional whiteboards for all15 maths lessons (45 authored steps). V1/V2 are unchanged.
 
-Verified locally: **181 backend tests, 39 frontend tests, curriculum checks and production build pass**. Two complete new lessons were exercised in the browser: narrated maths transfer correctly recorded support; unassisted reading transfer recorded independent evidence. Reload persistence, parent controls/export, speech controls, older-age content, illustration labels and enforced breaks were checked. Screenshots and the detailed browser record are in `evaluation/reports`.
+## Run the normal application
 
-The existing browser test profile is **Demo Learner**, ages 12–15, with test PIN **482617**, voice on and AI off. These are synthetic local test values, not an account for a child. The clean archive excludes this profile and its database. `tarka-v3.zip` and `tarka-v3-package.json` are in the parent output folder.
+From this folder in PowerShell, stop the old app with Ctrl+C and run `./START-LOCAL.ps1`. It applies the additive account migration and serves the built frontend at http://127.0.0.1:8003. Keep the terminal open. On a fresh machine, follow README.md to install locked dependencies and build first. Back up an existing deployed database before migration.
 
-## Start the application
+Choose Create account. A parent uses a made-up username, a15–128-character password and adult acknowledgement. If the current browser contains an older V3 learner, supply its existing parent PIN to keep that record. Sign-in on another browser restores account progress. One learner belongs to each account. Passwords and the six-digit parent PIN have separate roles. There is no forgotten-password/email recovery or MFA; save the password securely.
 
-From this `tarka-v3` folder in PowerShell run `./START-LOCAL.ps1`, then open **http://127.0.0.1:8003**. The launcher applies migrations and seeds the V3 database, then serves the built frontend. Keep the terminal open. It uses a project `.venv`, or the existing workspace `work/tarka-venv`. A fresh machine needs the dependency setup in README.md first.
+In a maths lesson select Open whiteboard → Teach on the board. Use Next/Previous/Replay. The tutor shows authored steps and diagrams; delivered NVIDIA-selected hints retain their source label when real inference is enabled. The scratchpad supports pen/eraser/undo/clear and typed working, held only in browser memory. The AI does not read or grade drawings. Transfer questions block old examples and preserve assistance records.
 
-## Review the new experience
+## Verification
 
-Create an adult-owned dummy profile, enable device voice and leave optional NVIDIA hints off. Open a lesson, choose an installed English voice and pace, listen to the lesson, pause/resume/stop, then try a question and a delivered hint. The text remains available. If the browser exposes no local English voice, the app reports this and text practice still works.
+Final source:247 backend tests (98 auth/API +149 regression),59 frontend tests, TypeScript/Vite build and original-content preservation pass. Browser signup, setup, wrong-password rejection, logout/login, saved progress, optional board navigation, drawing/undo, transfer restrictions, targeted hint board and supported completion were exercised. The parent view retained5 attempts,1 hint,0 voice requests and2 board requests for the completed synthetic lesson. Desktop/narrow layouts were checked. See STATUS.md and evaluation/reports/accounts-whiteboard-browser.md for evidence and limits.
 
-Complete the practice items, listen to the different transfer question and answer correctly. The result must be supported, survive reload and appear with narration requests in the parent export. On another lesson, complete the transfer first try without hints/narration and confirm independent evidence. Test parent lock/settings, break controls and a reading transfer with its own passage.
+Verification used http://localhost:8004 with a separate synthetic database in workspace work/. Its dummy account is qa_parent_1020_01, password `Local demo only autumn 2026!`, learner Board Explorer, PIN684291, AI/voice off. These public test values are not suitable real credentials. This test database is excluded from the distribution archive and does not alter the normal learner profile. Stop its terminal with Ctrl+C when no longer needed.
 
-## Accounts and remaining release work
+## Remaining external work
 
-Device voice needs no paid API or microphone. It is not NVIDIA-generated audio. Optional NVIDIA/Nebius hint selection still requires a server-side NEBIUS_API_KEY, an account-visible configured model, parent opt-in and an explicitly authorized spending ceiling. Preflight reads the catalog; live-check is separately gated and must use synthetic data. No paid calls have been authorized in this work.
+- Live NVIDIA/Nebius inference: enter NEBIUS_API_KEY locally, run preflight, authorize a spending ceiling, then perform the gated synthetic live check. Zero paid calls were made here.
+- Production: validate PostgreSQL/container deployment and backups; configure HTTPS, secure cookies, strong secrets, exact origins and trusted-proxy/host limits. Use one app worker initially. No hosting was published.
+- Independent security/accessibility/educator review and an appropriately arranged student study remain pending. API tests do not certify security or prove learning gains.
 
-PostgreSQL/Docker and public hosting require the environments described in docs/DEPLOYMENT.md. No site is published automatically. Record real audio quality, provider tests and deployment checks separately from automated test doubles. Educator review and supervised student testing remain pending; no learning gains or child participants are invented.
-
-## Retained prototype limits
-
-One learner per browser; 30-day session access without recovery; expired records need operator retention/deletion; parent PIN is not identity/consent verification; no complete school curriculum, open chat or microphone conversation. First-try transfer evidence is narrow and cannot prove mastery or absence of outside help.
-
-The user records the video using docs/DEMO-STORYBOARD.md. V3 preserves original content, but this revised scope's hackathon eligibility must be rechecked before submission.
+The clean archive is ../tarka-v3.zip; its checksum is ../tarka-v3-package.json. It includes source, built frontend, migrations, original content, tests, reports and instructions. Credentials, databases and installed dependencies are excluded. Account/whiteboard design details and API routes are in docs/ACCOUNTS-AND-WHITEBOARD.md. The user records the demo; no video was fabricated.

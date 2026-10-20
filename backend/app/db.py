@@ -33,6 +33,38 @@ class Lesson(Base):
     data: Mapped[dict] = mapped_column(JSON)
 
 
+class Account(Base):
+    __tablename__ = 'accounts'
+    id: Mapped[str] = mapped_column(String(36), primary_key=True)
+    family_id: Mapped[str] = mapped_column(String(36), unique=True)
+    username: Mapped[str] = mapped_column(String(32), unique=True)
+    password_hash: Mapped[str] = mapped_column(String(250))
+    credential_version: Mapped[int] = mapped_column(Integer, default=1)
+    created_at: Mapped[float] = mapped_column(Float, default=time.time)
+
+
+class AuthSession(Base):
+    __tablename__ = 'auth_sessions'
+    token_hash: Mapped[str] = mapped_column(String(64), primary_key=True)
+    family_id: Mapped[str] = mapped_column(String(36), index=True)
+    account_id: Mapped[str | None] = mapped_column(String(36), index=True, nullable=True)
+    credential_version: Mapped[int] = mapped_column(Integer, default=0)
+    csrf: Mapped[str] = mapped_column(String(64))
+    created_at: Mapped[float] = mapped_column(Float, default=time.time)
+    last_seen_at: Mapped[float] = mapped_column(Float, default=time.time)
+    expires_at: Mapped[float] = mapped_column(Float)
+    revoked: Mapped[bool] = mapped_column(Boolean, default=False)
+    parent_hash: Mapped[str] = mapped_column(String(64), default='')
+    parent_expires: Mapped[float] = mapped_column(Float, default=0)
+
+
+class AuthRateLimit(Base):
+    __tablename__ = 'auth_rate_limits'
+    key: Mapped[str] = mapped_column(String(100), primary_key=True)
+    count: Mapped[int] = mapped_column(Integer)
+    expires_at: Mapped[float] = mapped_column(Float, index=True)
+
+
 class LearningRecord(Base):
     __tablename__ = 'learning_records'
     id: Mapped[str] = mapped_column(String(80), primary_key=True)

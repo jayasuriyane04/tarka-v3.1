@@ -45,6 +45,24 @@ class NarrationOut(Strict):
 
 class DeleteIn(Strict):
     confirm: Literal[True]
+    current_password: str | None = Field(default=None, min_length=1, max_length=128, repr=False)
+
+
+class RegisterIn(Strict):
+    username: str = Field(min_length=3, max_length=32, pattern=r'^[A-Za-z0-9_]+$')
+    password: str = Field(min_length=15, max_length=128, repr=False)
+    adult_confirmed: Literal[True]
+    existing_pin: str | None = Field(default=None, pattern=r'^\d{6}$', repr=False)
+
+
+class LoginIn(Strict):
+    username: str = Field(min_length=3, max_length=32, pattern=r'^[A-Za-z0-9_]+$')
+    password: str = Field(min_length=1, max_length=128, repr=False)
+
+
+class PasswordIn(Strict):
+    current_password: str = Field(min_length=1, max_length=128, repr=False)
+    new_password: str = Field(min_length=15, max_length=128, repr=False)
 
 
 class HintSelection(Strict):

@@ -25,8 +25,12 @@ class Settings(BaseSettings):
     model_max_tokens: int = 512
     parent_token_seconds: int = 600
     break_seconds: int = 60
+    auth_session_seconds: int = 7 * 86400
+    auth_idle_seconds: int = 86400
 
     def validate_deployment(self):
+        if not 3600 <= self.auth_session_seconds <= 7 * 86400 or not 900 <= self.auth_idle_seconds <= 86400:
+            raise ValueError('Account sessions must have bounded absolute and idle lifetimes.')
         if not math.isfinite(self.paid_budget_usd) or self.paid_budget_usd < 0:
             raise ValueError('Budget must be finite and nonnegative.')
         if self.enable_paid_operations and self.paid_budget_usd <= 0:

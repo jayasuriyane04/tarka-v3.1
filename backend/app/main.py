@@ -10,13 +10,16 @@ import time
 import uuid
 
 from fastapi import Depends, FastAPI, HTTPException, Request, Response
+from fastapi.exceptions import RequestValidationError
 from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy import select, delete, func, update
+from sqlalchemy.exc import IntegrityError
 from .config import ROOT, settings
-from .db import SessionLocal, Family, Lesson, LearningRecord, Usage, Budget
-from .schemas import SetupIn, UnlockIn, ProfileIn, LessonIn, AnswerIn, DeleteIn, NarrationIn, NarrationOut
+from .db import SessionLocal, Family, Lesson, LearningRecord, Usage, Budget, Account, AuthSession
+from .schemas import SetupIn, UnlockIn, ProfileIn, LessonIn, AnswerIn, DeleteIn, NarrationIn, NarrationOut, RegisterIn, LoginIn, PasswordIn
 from .providers import ProviderUnavailable, cards_for, select_hint
+from . import auth
 
 COOKIE = 'tarka_v3_session'
 _locks = {}
@@ -30,6 +33,15 @@ async def lifespan(app):
 
 
 app = FastAPI(title='Tarka Family Voice API', version='0.3.0', lifespan=lifespan)
+
+
+@app.exception_handler(RequestValidationError)
+async def validation_error(request, error):
+    # Pydantic's default errors include the offending input, which may contain
+    # passwords, PINs or a malformed JSON request body. Never echo those values.
+    return JSONResponse({'detail': [{'loc': item['loc'], 'type': item['type'],
+                                    'msg': 'Invalid value. Check this field.'}
+                                   for item in error.errors()]}, status_code=422)
 
 
 @app.middleware('http')
@@ -72,11 +84,7 @@ def check_pin(pin, stored):
 
 
 def identify(db, request):
-    raw = request.cookies.get(COOKIE, '')
-    if not raw or len(raw) > 128:
-        return None
-    family = db.scalar(select(Family).where(Family.token_hash == digest(raw)))
-    return family if family and family.created_at > time.time() - 30 * 86400 else None
+    return auth.identify(db, request)
 
 
 def limit_anonymous(request):
@@ -103,7 +111,7 @@ async def context(request: Request):
             origin = request.headers.get('origin')
             if origin and origin not in {value.strip() for value in settings.allowed_origins.split(',')}:
                 raise HTTPException(403, 'This website is not allowed to change your learning space.')
-            if not secrets.compare_digest(request.headers.get('x-csrf-token', ''), family.csrf):
+            if not secrets.compare_digest(request.headers.get('x-csrf-token', ''), auth.csrf_for(family)):
                 raise HTTPException(403, 'Please reload to refresh your session.')
         if request.method == 'POST' or request.url.path.startswith('/api/lessons/'):
             # Reading a lesson may create its record/start the timer, so serialize it too.
@@ -133,7 +141,8 @@ def setup_required(family):
 def parent_required(request, family):
     setup_required(family)
     token = request.headers.get('x-parent-token', '')
-    if not token or len(token) > 128 or family.parent_expires <= time.time() or not secrets.compare_digest(digest(token), family.parent_hash):
+    scope = auth.parent_scope(family)
+    if not token or len(token) > 128 or scope.parent_expires <= time.time() or not secrets.compare_digest(digest(token), scope.parent_hash):
         raise HTTPException(403, 'Unlock the parent space to make this change.')
 
 
@@ -196,7 +205,10 @@ def collection(db, family):
 
 def bootstrap_data(db, family):
     lessons, progress = collection(db, family) if family.pin_hash else ([], {'completed_lessons': 0, 'independent_transfers': 0, 'practised_questions': 0, 'total_lessons': 0, 'by_subject': []})
-    return {'session': {'id': family.id, 'csrf_token': family.csrf, 'setup_complete': bool(family.pin_hash)},
+    account = auth.account_for(db, family)
+    return {'session': {'id': family.id, 'csrf_token': auth.csrf_for(family), 'setup_complete': bool(family.pin_hash)},
+            'auth': {'authenticated': account is not None, 'username': account.username if account else None,
+                     'legacy_profile': bool(family.pin_hash and not account)},
             'profile': profile(family), 'lessons': lessons, 'progress': progress, 'break': break_state(family),
             'mode': {'ai': 'nebius_ready' if family.ai_enabled and settings.nebius_api_key and settings.enable_paid_operations else 'lesson',
                      'paid_enabled': settings.enable_paid_operations}}
@@ -222,7 +234,10 @@ def public_lesson(db, family, lesson, record):
     return {**public, 'total_questions': len(lesson['questions']), 'index': position,
             'question': {key: question[key] for key in ['id', 'prompt', 'options', 'kind']} if question else None,
             'state': {'tries': len(attempts), 'assistance_level': len(hints), 'answered': bool(attempts and attempts[-1]['correct']),
-                      'narration_requests': narration.get('requests', 0), 'voice_assisted': narration.get('assistance', False),
+                      'narration_requests': narration.get('requests', 0),
+                      'voice_assisted': narration.get('voice_assistance', narration.get('assistance', False) if not narration.get('whiteboard_assistance') else False),
+                      'whiteboard_requests': narration.get('whiteboard_requests', 0),
+                      'whiteboard_assisted': narration.get('whiteboard_assistance', False),
                       'last_choice': attempts[-1]['choice'] if attempts else None, 'completed': record.completed, 'transfer_independent': record.transfer_independent},
             'hints': hints, 'last_feedback': feedback_for(feedback_question, feedback_attempts) if feedback_question else None}
 
@@ -238,12 +253,94 @@ def bootstrap(request: Request, response: Response):
     with SessionLocal() as db:
         family = identify(db, request)
         if family is None:
-            raw = secrets.token_urlsafe(32)
-            family = Family(id=str(uuid.uuid4()), token_hash=digest(raw), csrf=secrets.token_hex(32))
-            db.add(family)
-            db.commit()
-            response.set_cookie(COOKIE, raw, httponly=True, secure=settings.cookie_secure, samesite='strict', max_age=30 * 86400, path='/')
+            family = auth.new_guest(db, response)
         return bootstrap_data(db, family)
+
+
+@app.post('/api/auth/register')
+def register(body: RegisterIn, request: Request, response: Response, ctx=Depends(context)):
+    db, family = ctx
+    if auth.account_for(db, family):
+        raise HTTPException(409, 'Sign out before creating another parent account.')
+    username = body.username.lower()
+    auth.throttle(db, request, 'register', username)
+    if family.pin_hash:
+        reservation = auth.reserve_pin_attempt(db, family.id)
+        if not body.existing_pin or not check_pin(body.existing_pin, family.pin_hash):
+            raise HTTPException(403, 'Enter the existing parent PIN to protect this saved profile.')
+        auth.refund_pin_attempt(db, reservation)
+    stored = auth.hash_password(body.password)
+    if db.scalar(select(Account.id).where(Account.username == username)):
+        raise HTTPException(409, 'Could not create this account. Choose another username or sign in.')
+    account = Account(id=str(uuid.uuid4()), family_id=family.id, username=username,
+                      password_hash=stored, credential_version=1)
+    db.add(account)
+    auth.revoke_current(db, family)
+    try:
+        db.flush()
+        auth.issue_session(db, family, response, account)
+    except IntegrityError:
+        db.rollback()
+        raise HTTPException(409, 'Could not create this account. Choose another username or sign in.')
+    return bootstrap_data(db, family)
+
+
+@app.post('/api/auth/login')
+def login(body: LoginIn, request: Request, response: Response, ctx=Depends(context)):
+    db, current = ctx
+    username = body.username.lower()
+    auth.throttle(db, request, 'login', username)
+    account = db.scalar(select(Account).where(Account.username == username))
+    if not auth.verify_password(body.password, account.password_hash if account else None):
+        raise HTTPException(401, 'The username or password did not match.')
+    family = db.get(Family, account.family_id)
+    if not family:
+        raise HTTPException(401, 'The username or password did not match.')
+    auth.revoke_current(db, current)
+    auth.issue_session(db, family, response, account)
+    return bootstrap_data(db, family)
+
+
+@app.post('/api/auth/logout')
+def logout(response: Response, ctx=Depends(context)):
+    db, family = ctx
+    auth.revoke_current(db, family)
+    return bootstrap_data(db, auth.new_guest(db, response))
+
+
+@app.post('/api/auth/logout-all')
+def logout_all(response: Response, ctx=Depends(context)):
+    db, family = ctx
+    account = auth.require_account(db, family)
+    # In-flight logins authenticated against the previous version are invalid too.
+    db.execute(update(Account).where(Account.id == account.id)
+               .values(credential_version=Account.credential_version + 1))
+    auth.revoke_all(db, account)
+    auth.revoke_current(db, family)
+    return bootstrap_data(db, auth.new_guest(db, response))
+
+
+@app.post('/api/auth/password')
+def change_password(body: PasswordIn, request: Request, response: Response, ctx=Depends(context)):
+    db, family = ctx
+    account = auth.require_account(db, family)
+    auth.throttle(db, request, 'password', account.username)
+    if not auth.verify_password(body.current_password, account.password_hash):
+        raise HTTPException(401, 'The current password did not match.')
+    new_hash = auth.hash_password(body.new_password)
+    # Compare-and-update also closes concurrent password-change races across workers.
+    changed = db.execute(update(Account).where(Account.id == account.id,
+                         Account.credential_version == account.credential_version,
+                         Account.password_hash == account.password_hash)
+                         .values(password_hash=new_hash, credential_version=Account.credential_version + 1))
+    if changed.rowcount != 1:
+        db.rollback()
+        raise HTTPException(409, 'Your account changed in another session. Sign in again.')
+    db.refresh(account)
+    auth.revoke_all(db, account)
+    auth.revoke_current(db, family)
+    auth.issue_session(db, family, response, account)
+    return bootstrap_data(db, family)
 
 
 @app.post('/api/setup')
@@ -251,6 +348,7 @@ def setup(body: SetupIn, ctx=Depends(context)):
     db, family = ctx
     if family.pin_hash:
         raise HTTPException(409, 'Your learning space is already set up. Use the parent settings.')
+    auth.require_account(db, family)
     family.pin_hash = hash_pin(body.pin)
     for key in ['nickname', 'age_band', 'ai_enabled', 'voice_enabled', 'session_minutes']:
         setattr(family, key, getattr(body, key))
@@ -387,9 +485,11 @@ def narration(body: NarrationIn, ctx=Depends(context)):
     segments[body.segment] = segments.get(body.segment, 0) + 1
     # Save before delivering text: a failed browser playback still counts as a
     # request for help. Never revoke an already-earned correct transfer result.
-    record.narrations = {**record.narrations, question['id']: {
+    record.narrations = {**record.narrations, question['id']: {**previous,
         'requests': previous.get('requests', 0) + 1,
         'assistance': bool(previous.get('assistance') or (not answered and body.segment in {'lesson', 'question', 'hint'})),
+        'voice_assistance': bool(previous.get('voice_assistance', previous.get('assistance', False) if not previous.get('whiteboard_assistance') else False)
+                                 or (not answered and body.segment in {'lesson', 'question', 'hint'})),
         'segments': segments, 'last_requested_at': time.time(),
     }}
     db.commit()
@@ -421,15 +521,15 @@ def finish_break(ctx=Depends(context)):
 def unlock(body: UnlockIn, ctx=Depends(context)):
     db, family = ctx
     setup_required(family)
-    failures = db.scalar(select(func.count()).select_from(Usage).where(Usage.family_id == family.id, Usage.status == 'pin_failed', Usage.created_at > time.time() - 600))
-    if failures >= 5:
-        raise HTTPException(429, 'Too many PIN attempts. Wait ten minutes before trying again.')
+    reservation = auth.reserve_pin_attempt(db, family.id)
     if not check_pin(body.pin, family.pin_hash):
         db.add(Usage(id=str(uuid.uuid4()), family_id=family.id, provider='security', status='pin_failed'))
         db.commit()
         raise HTTPException(403, 'That PIN did not match.')
+    auth.refund_pin_attempt(db, reservation)
     token = secrets.token_urlsafe(32)
-    family.parent_hash, family.parent_expires = digest(token), time.time() + settings.parent_token_seconds
+    scope = auth.parent_scope(family)
+    scope.parent_hash, scope.parent_expires = digest(token), time.time() + settings.parent_token_seconds
     db.commit()
     return {'parent_token': token, 'expires_in': settings.parent_token_seconds}
 
@@ -445,6 +545,7 @@ def parent_overview(request: Request, ctx=Depends(context)):
         item['attempts'] = sum(len(value) for value in record.answers.values()) if record else 0
         item['hints_used'] = sum(len(value) for value in record.hints.values()) if record else 0
         item['narration_requests'] = sum(value.get('requests', 0) for value in record.narrations.values()) if record else 0
+        item['whiteboard_requests'] = sum(value.get('whiteboard_requests', 0) for value in record.narrations.values()) if record else 0
     budget = db.get(Budget, 1)
     return {'profile': profile(family), 'progress': progress, 'lessons': summaries,
             'usage': {'reserved_usd': budget.reserved_usd if budget else 0, 'budget_usd': settings.paid_budget_usd,
@@ -456,7 +557,8 @@ def parent_overview(request: Request, ctx=Depends(context)):
 def lock_parent(request: Request, ctx=Depends(context)):
     db, family = ctx
     parent_required(request, family)
-    family.parent_hash, family.parent_expires = '', 0
+    scope = auth.parent_scope(family)
+    scope.parent_hash, scope.parent_expires = '', 0
     db.commit()
     return {'locked': True}
 
@@ -486,6 +588,13 @@ def export_progress(request: Request, ctx=Depends(context)):
 def delete_profile(body: DeleteIn, request: Request, response: Response, ctx=Depends(context)):
     db, family = ctx
     parent_required(request, family)
+    account = auth.account_for(db, family)
+    if account:
+        auth.throttle(db, request, 'delete', account.username)
+        if not body.current_password or not auth.verify_password(body.current_password, account.password_hash):
+            raise HTTPException(401, 'Enter your current password to delete this account and profile.')
+        db.delete(account)
+    db.execute(delete(AuthSession).where(AuthSession.family_id == family.id))
     db.execute(delete(LearningRecord).where(LearningRecord.family_id == family.id))
     db.execute(delete(Usage).where(Usage.family_id == family.id))
     db.delete(family)
@@ -493,6 +602,11 @@ def delete_profile(body: DeleteIn, request: Request, response: Response, ctx=Dep
     db.commit()
     response.delete_cookie(COOKIE, path='/', httponly=True, secure=settings.cookie_secure, samesite='strict')
     return {'deleted': True}
+
+
+from .whiteboard import register_whiteboard
+register_whiteboard(app, context=context, ready_to_learn=ready_to_learn, lesson_data=lesson_data,
+                    record_for=record_for, feedback_for=feedback_for)
 
 
 dist = ROOT / 'frontend/dist'

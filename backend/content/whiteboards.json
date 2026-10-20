@@ -1,0 +1,598 @@
+{
+  "m68-01": {
+    "example_prompt": "What is 8 + 5?",
+    "arithmetic_checks": [
+      "8+5=13",
+      "5=2+3",
+      "10+3=13"
+    ],
+    "steps": [
+      {
+        "title": "Start with two groups",
+        "text": "Our example joins 8 counters and 5 counters. How many more does 8 need to make ten?",
+        "equation": "8 + 5",
+        "visual": {
+          "kind": "counters",
+          "groups": [
+            8,
+            5
+          ],
+          "caption": "Eight counters and five counters."
+        }
+      },
+      {
+        "title": "Make a ten",
+        "text": "Move 2 from the group of 5 to the group of 8. There are 3 left. Moving counters changes the groups, not the total.",
+        "equation": "8 + 2 = 10",
+        "visual": {
+          "kind": "counters",
+          "groups": [
+            10,
+            3
+          ],
+          "caption": "The same thirteen counters regrouped into ten and three."
+        }
+      },
+      {
+        "title": "Join what remains",
+        "text": "Add the 3 remaining counters to ten. We have counted every counter once.",
+        "equation": "10 + 3 = 13",
+        "visual": {
+          "kind": "counters",
+          "groups": [
+            10,
+            3
+          ],
+          "caption": "Ten and three make thirteen."
+        }
+      }
+    ]
+  },
+  "m68-02": {
+    "example_prompt": "There are 3 baskets with 2 apples in each. How many apples?",
+    "arithmetic_checks": [
+      "2+2+2=6",
+      "3*2=6"
+    ],
+    "steps": [
+      {
+        "title": "Spot equal groups",
+        "text": "The example has 3 baskets. Each basket has 2 apples.",
+        "visual": {
+          "kind": "counters",
+          "groups": [
+            2,
+            2,
+            2
+          ],
+          "caption": "Three groups of two counters stand for the baskets."
+        }
+      },
+      {
+        "title": "Count by twos",
+        "text": "Count one basket at a time: 2, then 4, then 6. Each jump adds two.",
+        "equation": "2 + 2 + 2 = 6",
+        "visual": {
+          "kind": "number_line",
+          "start": 0,
+          "end": 6,
+          "marks": [
+            0,
+            2,
+            4,
+            6
+          ],
+          "caption": "Three equal jumps of two from zero to six."
+        }
+      },
+      {
+        "title": "Name the total",
+        "text": "Three groups of two make six apples. Multiplication is a short way to write these equal groups.",
+        "equation": "3 × 2 = 6"
+      }
+    ]
+  },
+  "m68-03": {
+    "example_prompt": "Share 8 counters into 2 equal groups. How many in one half?",
+    "arithmetic_checks": [
+      "8/2=4",
+      "4+4=8"
+    ],
+    "steps": [
+      {
+        "title": "Start with eight",
+        "text": "Share these eight counters fairly between two groups. Each group must have the same number.",
+        "visual": {
+          "kind": "counters",
+          "groups": [
+            8
+          ],
+          "caption": "Eight counters before sharing."
+        }
+      },
+      {
+        "title": "Share equally",
+        "text": "Put one counter in each group, then repeat until all eight have been shared.",
+        "equation": "8 ÷ 2 = 4",
+        "visual": {
+          "kind": "counters",
+          "groups": [
+            4,
+            4
+          ],
+          "caption": "Two equal groups of four counters."
+        }
+      },
+      {
+        "title": "Check one half",
+        "text": "One of the two equal groups has four counters. Put the two halves together to check the original eight.",
+        "equation": "4 + 4 = 8",
+        "visual": {
+          "kind": "fraction",
+          "numerator": 1,
+          "denominator": 2,
+          "caption": "One of two equal parts is one half."
+        }
+      }
+    ]
+  },
+  "m68-04": {
+    "example_prompt": "There are 12 shells. Move 3 aside. How many remain?",
+    "arithmetic_checks": [
+      "12-3=9",
+      "9+3=12"
+    ],
+    "steps": [
+      {
+        "title": "Start at twelve",
+        "text": "There are twelve shells. We move three aside, so the number remaining gets smaller.",
+        "equation": "12 − 3",
+        "visual": {
+          "kind": "counters",
+          "groups": [
+            12
+          ],
+          "caption": "Twelve counters stand for twelve shells."
+        }
+      },
+      {
+        "title": "Count back three",
+        "text": "Starting at 12, count back: 11, 10, 9. Count three moves, not the starting number.",
+        "visual": {
+          "kind": "number_line",
+          "start": 8,
+          "end": 12,
+          "marks": [
+            9,
+            10,
+            11,
+            12
+          ],
+          "caption": "Count backwards from twelve through eleven and ten to nine."
+        }
+      },
+      {
+        "title": "Check by adding back",
+        "text": "Nine shells remain. The nine remaining shells and the three moved aside make twelve again.",
+        "equation": "9 + 3 = 12",
+        "visual": {
+          "kind": "counters",
+          "groups": [
+            9,
+            3
+          ],
+          "caption": "Nine remaining and three moved aside still total twelve."
+        }
+      }
+    ]
+  },
+  "m68-05": {
+    "example_prompt": "What number is one ten and five ones?",
+    "arithmetic_checks": [
+      "10+5=15",
+      "1*10+5=15"
+    ],
+    "steps": [
+      {
+        "title": "Find the full ten",
+        "text": "One ten means a group containing ten ones. Count the first group to check it.",
+        "visual": {
+          "kind": "counters",
+          "groups": [
+            10
+          ],
+          "caption": "One complete group of ten."
+        }
+      },
+      {
+        "title": "Keep the extra ones",
+        "text": "There are five extra ones beside the complete ten. Keep their places separate.",
+        "equation": "10 + 5",
+        "visual": {
+          "kind": "counters",
+          "groups": [
+            10,
+            5
+          ],
+          "caption": "One full ten and five extra ones."
+        }
+      },
+      {
+        "title": "Read the number",
+        "text": "One ten and five ones make fifteen. The 1 in 15 counts tens; the 5 counts ones.",
+        "equation": "10 + 5 = 15"
+      }
+    ]
+  },
+  "m911-01": {
+    "example_prompt": "Write 1/2 using a denominator of 4.",
+    "arithmetic_checks": [
+      "1/2=2/4",
+      "1*2=2",
+      "2*2=4"
+    ],
+    "steps": [
+      {
+        "title": "Show one half",
+        "text": "Begin with one of two equal parts shaded. Keep the size of the whole unchanged.",
+        "equation": "1 / 2",
+        "visual": {
+          "kind": "fraction",
+          "numerator": 1,
+          "denominator": 2,
+          "caption": "One of two equal parts is shaded."
+        }
+      },
+      {
+        "title": "Split every part equally",
+        "text": "Split both original parts into two. There are now four equal parts in the same whole; two are shaded.",
+        "equation": "(1 × 2) / (2 × 2)",
+        "visual": {
+          "kind": "fraction",
+          "numerator": 2,
+          "denominator": 4,
+          "caption": "Two of four equal parts cover the same half."
+        }
+      },
+      {
+        "title": "Check the same amount",
+        "text": "The part size became smaller, but the shaded amount stayed the same. Multiply both numerator and denominator by the same number.",
+        "equation": "1/2 = 2/4",
+        "visual": {
+          "kind": "fraction",
+          "numerator": 2,
+          "denominator": 4,
+          "caption": "Two quarters are equivalent to one half."
+        }
+      }
+    ]
+  },
+  "m911-02": {
+    "example_prompt": "A rectangle is 6 cm long and 4 cm wide. What is its perimeter?",
+    "arithmetic_checks": [
+      "6+4+6+4=20",
+      "2*(6+4)=20"
+    ],
+    "steps": [
+      {
+        "title": "Follow the outside",
+        "text": "Perimeter is the distance around the edge. This example rectangle has length 6 cm and width 4 cm.",
+        "visual": {
+          "kind": "rectangle",
+          "length": 6,
+          "width": 4,
+          "caption": "Opposite sides match: six centimetres, four centimetres, six centimetres, four centimetres."
+        }
+      },
+      {
+        "title": "Add all four sides",
+        "text": "Walk around once: 6, then 4, then 6, then 4. Include every side exactly once.",
+        "equation": "6 + 4 + 6 + 4"
+      },
+      {
+        "title": "Include the unit",
+        "text": "The total distance is twenty centimetres. We are measuring an edge, so the unit is cm.",
+        "equation": "6 + 4 + 6 + 4 = 20 cm"
+      }
+    ]
+  },
+  "m911-03": {
+    "example_prompt": "x + 6 = 15. What is x?",
+    "arithmetic_checks": [
+      "15-6=9",
+      "9+6=15"
+    ],
+    "steps": [
+      {
+        "title": "Name the missing part",
+        "text": "An unknown number plus 6 makes 15. Think of 15 as the whole and 6 as a known part.",
+        "equation": "x + 6 = 15"
+      },
+      {
+        "title": "Undo adding six",
+        "text": "Subtract 6 from both sides to keep the equation balanced. The missing part is 9.",
+        "equation": "x = 15 − 6 = 9",
+        "visual": {
+          "kind": "number_line",
+          "start": 0,
+          "end": 15,
+          "marks": [
+            0,
+            6,
+            9,
+            15
+          ],
+          "caption": "Nine is six less than fifteen."
+        }
+      },
+      {
+        "title": "Check in the original",
+        "text": "Replace x with 9 and check the original addition. Both sides now have value 15.",
+        "equation": "9 + 6 = 15"
+      }
+    ]
+  },
+  "m911-04": {
+    "example_prompt": "What is 1.2 + 0.35?",
+    "arithmetic_checks": [
+      "1.20+0.35=1.55",
+      "20+35=55",
+      "120+35=155"
+    ],
+    "steps": [
+      {
+        "title": "Use the same place value",
+        "text": "Write 1.2 as 1.20. The extra zero does not change its value: both mean one and twenty hundredths.",
+        "equation": "1.20 + 0.35"
+      },
+      {
+        "title": "Add equal-sized parts",
+        "text": "Twenty hundredths plus thirty-five hundredths make fifty-five hundredths. The one whole is still there.",
+        "equation": "20 hundredths + 35 hundredths = 55 hundredths"
+      },
+      {
+        "title": "Combine and check",
+        "text": "One whole and fifty-five hundredths is 1.55. Adding a positive amount made the result larger than 1.20.",
+        "equation": "1.20 + 0.35 = 1.55",
+        "visual": {
+          "kind": "number_line",
+          "start": 1,
+          "end": 2,
+          "marks": [
+            1,
+            1.2,
+            1.55,
+            2
+          ],
+          "caption": "The total lies between one and two, beyond 1.20."
+        }
+      }
+    ]
+  },
+  "m911-05": {
+    "example_prompt": "How many minutes pass from 2:45 pm to 3:10 pm?",
+    "arithmetic_checks": [
+      "15+10=25",
+      "60-45=15"
+    ],
+    "steps": [
+      {
+        "title": "Use the next hour",
+        "text": "Our example runs from 2:45 pm to 3:10 pm. First count from 2:45 to 3:00: fifteen minutes.",
+        "equation": "60 − 45 = 15 minutes"
+      },
+      {
+        "title": "Add the last ten minutes",
+        "text": "From 3:00 to 3:10 is ten more minutes. The line shows elapsed minutes, not clock readings.",
+        "visual": {
+          "kind": "number_line",
+          "start": 0,
+          "end": 25,
+          "marks": [
+            0,
+            15,
+            25
+          ],
+          "caption": "Elapsed duration: fifteen minutes to the hour, then ten more minutes."
+        }
+      },
+      {
+        "title": "Join the two durations",
+        "text": "Add the fifteen-minute part and the ten-minute part. Twenty-five minutes pass altogether.",
+        "equation": "15 + 10 = 25 minutes"
+      }
+    ]
+  },
+  "m1215-01": {
+    "example_prompt": "A paint pattern uses red:blue beads in a 2:3 ratio. With 12 blue beads, how many red beads are needed?",
+    "arithmetic_checks": [
+      "12/3=4",
+      "2*4=8",
+      "2/3=8/12"
+    ],
+    "steps": [
+      {
+        "title": "Read the relationship",
+        "text": "Each basic set has 2 red beads for 3 blue beads. Both colours must grow by the same factor.",
+        "equation": "red : blue = 2 : 3",
+        "visual": {
+          "kind": "counters",
+          "groups": [
+            2,
+            3
+          ],
+          "caption": "The first group represents red and the second represents blue."
+        }
+      },
+      {
+        "title": "Find the scale factor",
+        "text": "Blue grows from 3 to 12. Divide 12 by 3 to find a scale factor of 4.",
+        "equation": "12 ÷ 3 = 4"
+      },
+      {
+        "title": "Scale red by the same factor",
+        "text": "Multiply the red count by four too. Eight red beads keep the 2:3 relationship with twelve blue beads.",
+        "equation": "2 × 4 = 8",
+        "visual": {
+          "kind": "counters",
+          "groups": [
+            8,
+            12
+          ],
+          "caption": "Eight red and twelve blue preserve the original ratio."
+        }
+      }
+    ]
+  },
+  "m1215-02": {
+    "example_prompt": "What is 1/4 + 1/2?",
+    "arithmetic_checks": [
+      "1/2=2/4",
+      "1/4+2/4=3/4"
+    ],
+    "steps": [
+      {
+        "title": "Choose equal-sized parts",
+        "text": "We need to add one quarter and one half. Rewrite the half using quarters.",
+        "equation": "1/2 = 2/4",
+        "visual": {
+          "kind": "fraction",
+          "numerator": 2,
+          "denominator": 4,
+          "caption": "The half is now shown as two quarters."
+        }
+      },
+      {
+        "title": "Count the quarters",
+        "text": "Join one quarter and two quarters. The parts are still quarters; only the number of parts changes.",
+        "equation": "1/4 + 2/4",
+        "visual": {
+          "kind": "fraction",
+          "numerator": 3,
+          "denominator": 4,
+          "caption": "Three equal quarter-parts are shaded."
+        }
+      },
+      {
+        "title": "Keep the denominator",
+        "text": "There are three quarters altogether. Do not add denominators: the size of each part stays one quarter.",
+        "equation": "1/4 + 2/4 = 3/4"
+      }
+    ]
+  },
+  "m1215-03": {
+    "example_prompt": "Solve 4x + 2 = 18.",
+    "arithmetic_checks": [
+      "18-2=16",
+      "16/4=4",
+      "4*4+2=18"
+    ],
+    "steps": [
+      {
+        "title": "Undo addition first",
+        "text": "In 4x + 2 = 18, subtract 2 from both sides. This leaves four equal copies of x.",
+        "equation": "4x = 18 − 2 = 16"
+      },
+      {
+        "title": "Undo multiplication",
+        "text": "Divide both sides by 4. Four equal groups share 16, so each group has 4.",
+        "equation": "x = 16 ÷ 4 = 4",
+        "visual": {
+          "kind": "counters",
+          "groups": [
+            4,
+            4,
+            4,
+            4
+          ],
+          "caption": "Sixteen counters shared into four equal groups of four."
+        }
+      },
+      {
+        "title": "Substitute to check",
+        "text": "Put 4 back in place of x in the original equation. The left side equals the right side.",
+        "equation": "4 × 4 + 2 = 18"
+      }
+    ]
+  },
+  "m1215-04": {
+    "example_prompt": "What is 25 percent of 80?",
+    "arithmetic_checks": [
+      "25/100=1/4",
+      "80/4=20",
+      "20*4=80"
+    ],
+    "steps": [
+      {
+        "title": "Translate percent",
+        "text": "Percent means per hundred. Twenty-five per hundred is the same proportion as one quarter.",
+        "equation": "25/100 = 1/4",
+        "visual": {
+          "kind": "fraction",
+          "numerator": 1,
+          "denominator": 4,
+          "caption": "One quarter is twenty-five percent of the whole."
+        }
+      },
+      {
+        "title": "Find a quarter of eighty",
+        "text": "Share eighty into four equal parts. The diagram shows the fraction of a whole, not eighty individual objects.",
+        "equation": "80 ÷ 4 = 20",
+        "visual": {
+          "kind": "fraction",
+          "numerator": 1,
+          "denominator": 4,
+          "caption": "Select one of four equal shares of eighty."
+        }
+      },
+      {
+        "title": "Check the amount",
+        "text": "Twenty is the requested percentage amount. Four groups of twenty return the original eighty.",
+        "equation": "20 × 4 = 80"
+      }
+    ]
+  },
+  "m1215-05": {
+    "example_prompt": "What is the mean of 2, 4 and 9?",
+    "arithmetic_checks": [
+      "2+4+9=15",
+      "15/3=5",
+      "5+5+5=15"
+    ],
+    "steps": [
+      {
+        "title": "Add every value",
+        "text": "Our three values are 2, 4 and 9. Add all three to find the total.",
+        "equation": "2 + 4 + 9 = 15",
+        "visual": {
+          "kind": "counters",
+          "groups": [
+            2,
+            4,
+            9
+          ],
+          "caption": "Three unequal groups contain fifteen counters in total."
+        }
+      },
+      {
+        "title": "Share across three values",
+        "text": "There are three values, so divide the total by three. Equal sharing makes three groups of five.",
+        "equation": "15 ÷ 3 = 5",
+        "visual": {
+          "kind": "counters",
+          "groups": [
+            5,
+            5,
+            5
+          ],
+          "caption": "The same fifteen counters regrouped into three equal groups of five."
+        }
+      },
+      {
+        "title": "Check the mean",
+        "text": "The mean is 5. It need not be one of the original values. Three copies of the mean reproduce the total.",
+        "equation": "5 + 5 + 5 = 15"
+      }
+    ]
+  }
+}

@@ -1,4 +1,33 @@
-# Tarka V3 status — 2026-10-16
+# Tarka V3 status — 2026-10-21
+
+## Accounts and whiteboard extension
+
+Implemented and browser-verified in the separate V3 folder. V1/V2 work is preserved. Parent username/password accounts now own learner records; Create account, Sign in, sign-out, all-device sign-out and password change are wired to backend routes. Salted scrypt, opaque revocable sessions, CSRF/origin protections, per-session parent capabilities, durable login/PIN attempt limits and credential-safe validation are included. Legacy V3 progress can be linked with its existing PIN. Migration0003 is additive.
+
+All fifteen maths lessons now offer optional whiteboards with45 authored steps, validated counters/fractions/number-lines/rectangles, manual step navigation and private drawing/typing. The board can show delivered NVIDIA-selected authored hints when configured; it does not generate unrestricted lessons or make a new paid call. Transfer blocks old examples. Separate board counts and shared assistance flags keep supported work distinct from independent transfer.
+
+## Final extension verification
+
+| Check | Measured result |
+|---|---|
+| Backend final source | **247 passed** across98 authentication/API tests and149 remaining regression/content/migration/provider/whiteboard tests; zero failures |
+| Frontend | **59 passed** across7 files |
+| TypeScript / production build | Passed;39 modules |
+| Preservation | V2's58 source hashes unchanged; all18 original lesson objects retained |
+| SQLite migration / PostgreSQL SQL | Migration/legacy preservation tests and PostgreSQL SQL compilation pass; live PostgreSQL unverified |
+| Actual browser | Signup→setup→maths board→attempts→hint board→supported transfer→reload→sign-out→wrong-password rejection→sign-in→saved parent progress passed |
+| Layout | Desktop and375px content width checked; no horizontal overflow in inspected board/account views |
+| Paid integrations | Zero live inference calls; missing key and authorized ceiling remain external blockers |
+
+Reports: [verification record](evaluation/reports/accounts-whiteboard-verification.json), [browser evidence](evaluation/reports/accounts-whiteboard-browser.md), and dated test XML/screenshots in the same directory. The earlier244-test run passed too; final split runs cover the latest247 collected tests after the throttle/revocation fixes. One existing Starlette/HTTPX deprecation warning remains; it did not fail tests.
+
+## Start and remaining steps
+
+Restart `./START-LOCAL.ps1` in the V3 folder to apply migration0003 and load the built update at http://127.0.0.1:8003. Existing unlinked learners choose Create account and their existing PIN to keep progress. The verification app at http://localhost:8004 uses a separate synthetic database, not the usual V3 learner records. See [HANDOVER.md](HANDOVER.md).
+
+No email password recovery, MFA or identity verification is implemented. Public operation still needs tested PostgreSQL/container/HTTPS hosting, secret configuration, retention/backups and independent review. Live Nebius requires a server-side key, account model check, parent opt-in and an explicitly authorized spending ceiling. No public deployment, real-child trial or educational/security certification is claimed.
+
+## Previous voice release — historical 2026-10-16 evidence
 
 The V3 local application is implemented and browser-verified. It is a separate copy of V2, with optional device narration and twelve additional lessons. V2 remains unchanged: all 58 source hashes match the baseline, and the original 18 lesson objects are exactly preserved.
 

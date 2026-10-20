@@ -33,3 +33,7 @@ Upstream references: [React](https://github.com/facebook/react), [FastAPI](https
 ## V3 speech dependency
 
 V3 adds no TTS package or model weights. Browser Web Speech (`speechSynthesis`, `SpeechSynthesisUtterance`) uses the selected installed voice, restricted to browser-reported local English voices. Voice assets belong to the operating system/voice vendor and are not redistributed in this source archive. Browser support and voice availability are runtime capabilities, not guarantees. See the [SpeechSynthesis API](https://developer.mozilla.org/en-US/docs/Web/API/SpeechSynthesis) and [localService](https://developer.mozilla.org/en-US/docs/Web/API/SpeechSynthesisVoice/localService) reference.
+
+## Account and board extension
+
+No additional package or hosted identity/TTS service was added. Password hashing uses Python hashlib.scrypt and secure random tokens use secrets. Whiteboard diagrams use bounded React/SVG elements; no external drawing or math-rendering library or model weights are bundled.

@@ -22,7 +22,7 @@ def test_isolated_v3_schema_matches_models_and_seed_is_idempotent(tmp_path):
     engine = create_engine(url)
     try:
         with engine.connect() as connection:
-            assert set(Base.metadata.tables) == {'families', 'lessons', 'learning_records', 'usage_logs', 'budget'}
+            assert set(Base.metadata.tables) == {'families', 'lessons', 'learning_records', 'usage_logs', 'budget', 'accounts', 'auth_sessions', 'auth_rate_limits'}
             assert set(Base.metadata.tables) <= set(inspect(connection).get_table_names())
             assert compare_metadata(MigrationContext.configure(connection), Base.metadata) == []
         with Session(engine) as db:

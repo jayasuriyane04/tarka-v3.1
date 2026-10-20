@@ -10,7 +10,7 @@ from sqlalchemy.orm import sessionmaker
 
 from app import main
 from app.config import ROOT, settings
-from app.db import Base, Budget, Family, LearningRecord, Usage, make_engine, seed
+from app.db import Base, Budget, Family, LearningRecord, Usage, AuthSession, make_engine, seed
 from app.providers import ProviderUnavailable
 
 
@@ -46,6 +46,11 @@ def client(database):
 
 
 def setup(client, **overrides):
+    if not client.get('/api/bootstrap').json()['auth']['authenticated']:
+        account = client.post('/api/auth/register', json={'username': 'parent_' + uuid.uuid4().hex[:12],
+                              'password': 'a safe test passphrase 2026', 'adult_confirmed': True})
+        assert account.status_code == 200, account.text
+        client.headers['X-CSRF-Token'] = account.json()['session']['csrf_token']
     response = client.post('/api/setup', json={**SETUP, **overrides})
     assert response.status_code == 200, response.text
     return response.json()
@@ -238,7 +243,7 @@ def test_parent_gate_expiry_revocation_and_cross_family_access(client, database)
     assert client.get('/api/parent/export').status_code == 403
     unlock(client)
     with database() as db:
-        db.get(Family, boot['session']['id']).parent_expires = time.time() - 1
+        db.get(AuthSession, main.digest(client.cookies.get(main.COOKIE))).parent_expires = time.time() - 1
         db.commit()
     assert client.get('/api/parent/overview').status_code == 403
 
@@ -303,7 +308,7 @@ def test_profile_delete_removes_owned_records_and_retains_budget(client, databas
         db.get(Budget, 1).reserved_usd = 0.42
         db.commit()
     assert post(client, 'parent/delete-profile', confirm=False).status_code == 422
-    assert post(client, 'parent/delete-profile', confirm=True).json() == {'deleted': True}
+    assert post(client, 'parent/delete-profile', confirm=True, current_password='a safe test passphrase 2026').json() == {'deleted': True}
     assert client.get('/api/parent/export').status_code == 401
     with database() as db:
         assert db.get(Family, boot['session']['id']) is None
@@ -337,13 +342,13 @@ def test_fixed_session_expiry_does_not_expose_or_delete_old_records(client, data
     boot = setup(client)
     post(client, 'hints', lesson_id='m68-01')
     with database() as db:
-        db.get(Family, boot['session']['id']).created_at = time.time() - 31 * 86400
+        db.get(AuthSession, main.digest(client.cookies.get(main.COOKIE))).expires_at = time.time() - 1
         db.commit()
     assert client.get('/api/lessons/m68-01').status_code == 401
     fresh = client.get('/api/bootstrap').json()
     assert fresh['session']['id'] != boot['session']['id']
     assert not fresh['session']['setup_complete']
-    # Expiry is loss of access, not deletion. Parent/operator docs disclose this limit.
+    # Expiry requires account login, never deletion of the owned learning record.
     with database() as db:
         assert db.get(Family, boot['session']['id']) is not None
         assert db.get(LearningRecord, boot['session']['id'] + ':m68-01') is not None
